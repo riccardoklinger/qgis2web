@@ -215,7 +215,8 @@ class MainDialog(QDialog, FORM_CLASS):
         writer = self.getWriterFactory()()
         (writer.layers, writer.groups, writer.popup,
          writer.visible, writer.interactive, writer.json,
-         writer.cluster, writer.getFeatureInfo) = self.getLayersAndGroups()
+         writer.cluster, writer.filter, 
+         writer.getFeatureInfo) = self.getLayersAndGroups()
         writer.params = self.getParameters()
         return writer
 
@@ -389,7 +390,7 @@ class MainDialog(QDialog, FORM_CLASS):
         self.layer_search_combo.clear()
         self.layer_search_combo.addItem("None")
         (layers, groups, popup, visible, interactive,
-         json, cluster, getFeatureInfo) = self.getLayersAndGroups()
+         json, cluster, filter, getFeatureInfo) = self.getLayersAndGroups()
         for count, layer in enumerate(layers):
             if layer.type() == layer.VectorLayer:
                 options = []
@@ -536,6 +537,7 @@ class MainDialog(QDialog, FORM_CLASS):
         interactive = []
         json = []
         cluster = []
+        filter = []
         getFeatureInfo = []
         for i in range(self.layers_item.childCount()):
             item = self.layers_item.child(i)
@@ -586,6 +588,7 @@ class MainDialog(QDialog, FORM_CLASS):
                 interactive[::-1],
                 json[::-1],
                 cluster[::-1],
+                filter[::-1],
                 getFeatureInfo[::-1])
 
     def reject(self):
@@ -731,6 +734,18 @@ class TreeLayerItem(QTreeWidgetItem):
                 self.clusterCheck.stateChanged.connect(self.changeCluster)
                 self.addChild(self.clusterItem)
                 tree.setItemWidget(self.clusterItem, 1, self.clusterCheck)
+            self.filterItem = QTreeWidgetItem(self)
+            self.filterAttribute = QComboBox()
+            fields = self.layer.fields()
+            attributes = []
+            for f in fields:
+                fieldIndex = fields.indexFromName(f.name())
+                editorWidget = layer.editorWidgetSetup(fieldIndex).type()
+                if editorWidget == 'Hidden':
+                    continue
+                print(f.type())
+                self.filterAttribute.addItem(f.name())
+            tree.setItemWidget(self.filterItem, 1, self.filterAttribute)
             self.popupItem = QTreeWidgetItem(self)
             self.popupItem.setText(0, "Popup fields")
             options = []
