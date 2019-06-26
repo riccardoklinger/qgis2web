@@ -96,6 +96,7 @@ class LeafletWriter(Writer):
             interactive=self.interactive,
             json=self.json,
             cluster=self.cluster,
+            filter=self.filter,
             getFeatureInfo=self.getFeatureInfo,
             params=self.params,
             folder=dest_folder)
@@ -110,7 +111,7 @@ class LeafletWriter(Writer):
     def writeLeaflet(
             cls, iface, feedback, folder,
             layer_list, visible, interactive, cluster,
-            json, getFeatureInfo, params, popup):
+            filter, json, getFeatureInfo, params, popup):
         outputProjectFileName = folder
         QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         legends = {}
@@ -148,7 +149,7 @@ class LeafletWriter(Writer):
 
         dataStore, cssStore = writeFoldersAndFiles(pluginDir, feedback,
                                                    outputProjectFileName,
-                                                   cluster, measure,
+                                                   cluster, filter, measure,
                                                    matchCRS, layerSearch,
                                                    canvas, addressSearch,
                                                    locate)

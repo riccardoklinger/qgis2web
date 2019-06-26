@@ -549,6 +549,7 @@ class MainDialog(QDialog, FORM_CLASS):
                     interactive.append(item.interactive)
                     json.append(item.json)
                     cluster.append(item.cluster)
+                    filter.append(item.filter)
                     getFeatureInfo.append(item.getFeatureInfo)
             else:
                 group = item.name
@@ -575,6 +576,11 @@ class MainDialog(QDialog, FORM_CLASS):
                         cluster.append(True)
                     else:
                         cluster.append(False)
+                    if hasattr(item, "filter") and item.filter:
+                        print("Line 579: " + type(item.filter)
+                        filter.append(True)
+                    else:
+                        cluster.append(False)
                     if hasattr(item, "getFeatureInfo") and item.getFeatureInfo:
                         getFeatureInfo.append(True)
                     else:
@@ -594,7 +600,7 @@ class MainDialog(QDialog, FORM_CLASS):
     def reject(self):
         self.saveParameters()
         (layers, groups, popup, visible, interactive,
-         json, cluster, getFeatureInfo) = self.getLayersAndGroups()
+         json, cluster, filter, getFeatureInfo) = self.getLayersAndGroups()
         try:
             for layer, pop, vis, int in zip(layers, popup, visible,
                                             interactive):

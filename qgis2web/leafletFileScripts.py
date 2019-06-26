@@ -8,8 +8,8 @@ from qgis2web.utils import replaceInTemplate
 
 
 def writeFoldersAndFiles(pluginDir, feedback, outputProjectFileName,
-                         cluster_set, measure, matchCRS, layerSearch, canvas,
-                         address, locate):
+                         cluster_set, filter_set, measure, matchCRS, 
+                         layerSearch, canvas, address, locate):
     feedback.showFeedback("Exporting libraries...")
     jsStore = os.path.join(outputProjectFileName, 'js')
     os.makedirs(jsStore)
@@ -89,6 +89,8 @@ def writeFoldersAndFiles(pluginDir, feedback, outputProjectFileName,
                         cssStore + 'MarkerCluster.css')
         shutil.copyfile(cssDir + 'MarkerCluster.Default.css',
                         cssStore + 'MarkerCluster.Default.css')
+    if len(filter_set):
+        print(filter_set)
     if layerSearch != "None":
         shutil.copyfile(jsDir + 'leaflet-search.js',
                         jsStore + 'leaflet-search.js')
